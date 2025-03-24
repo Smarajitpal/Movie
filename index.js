@@ -54,6 +54,24 @@ app.delete("/movies/:id", async (req, res) => {
   }
 });
 
+app.put("/movies/:id", async (req, res) => {
+  const movieId = req.params.id;
+  const updatedMovieData = req.body;
+  try {
+    const updatedMovie = await Movies.findByIdAndUpdate(
+      movieId,
+      updatedMovieData,
+      { new: true }
+    );
+    if (!updatedMovie) {
+      res.status(404).json({ message: "Movie not found." });
+    }
+    res.status(200).json(updatedMovie);
+  } catch (error) {
+    res.status(500).json({ error: "Internal Server Error." });
+  }
+});
+
 const PORT = 3000;
 app.listen(PORT, () => {
   console.log("Server is running on port", PORT);
